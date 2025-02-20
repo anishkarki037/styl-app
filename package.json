@@ -10,16 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tensorflow-models/body-pix": "^2.2.1",
-    "@tensorflow-models/coco-ssd": "^2.2.3",
-    "@tensorflow-models/mobilenet": "^2.1.1",
-    "@tensorflow/tfjs": "^4.22.0",
-    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "canvas": "^3.1.0",
-    "clarifai": "^2.9.1",
     "cors": "^2.8.5",
-    "jsfeat": "^0.0.8",
     "lucide-react": "^0.475.0",
     "moondream": "^0.0.5",
     "node-sass": "^9.0.0",
