@@ -54,7 +54,10 @@ const Rate = () => {
         throw new Error(data.error || "Failed to process image");
       }
 
-      setFeedback(data.caption.answer);
+      setFeedback({
+        engaging: data.engaging_expression, // Directly access engaging_expression
+        summary: data.summary, // Directly access summary
+      });
     } catch (err) {
       console.error("Processing error:", err);
       setError(err.message || "Error processing image");
@@ -102,7 +105,20 @@ const Rate = () => {
 
       {/* Feedback with slide-up effect */}
       <div className={`feedback-container ${feedback ? "show" : ""}`}>
-        {feedback && <p className="feedback-message">{feedback}</p>}
+        {image && (
+          <img
+            src={image}
+            alt="Selected"
+            className="preview-image feedback-image"
+          />
+        )}
+
+        {feedback && (
+          <div className="feedback-text">
+            <h2>{feedback.engaging || "No engaging expression"}</h2>
+            <p>{feedback.summary || "No summary available"}</p>
+          </div>
+        )}
       </div>
     </div>
   );

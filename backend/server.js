@@ -1,8 +1,8 @@
-// server.js
 const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
 const cors = require("cors");
+const { OpenAI } = require("openai");
 const { vl } = require("moondream");
 
 const app = express();
@@ -10,11 +10,17 @@ const port = 5000;
 
 app.use(cors());
 
+const upload = multer({ dest: "uploads/" });
+
 const model = new vl({
   apiKey:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlfaWQiOiIzM2UwYzQzYy1kNzg3LTQ4ZDYtYWI0Ny1kMTM4YjM5OTYyOGIiLCJpYXQiOjE3NDAwMzA3NDV9._87u0enzL7ZcpI2mZYmi-k5mOR7vaf8FIurFk5sOrCE",
-}); // Replace with your API key
-const upload = multer({ dest: "uploads/" });
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXlfaWQiOiIzM2UwYzQzYy1kNzg3LTQ4ZDYtYWI0Ny1kMTM4YjM5OTYyOGIiLCJpYXQiOjE3NDAwMzA3NDV9._87u0enzL7ZcpI2mZYmi-k5mOR7vaf8FIurFk5sOrCE", // Replace with actual Moondream API key
+});
+
+const openai = new OpenAI({
+  apiKey: "878126c9-6656-4ab4-aebc-bb68147ee78f", // Replace with actual KlusterAI API key
+  baseURL: "https://api.kluster.ai/v1",
+});
 
 app.post("/process-image", upload.single("image"), async (req, res) => {
   const file = req.file;
@@ -23,26 +29,51 @@ app.post("/process-image", upload.single("image"), async (req, res) => {
   }
 
   try {
-    // Read the uploaded image
     const image = fs.readFileSync(file.path);
-
     console.log("Processing image with Moondream...");
 
-    // Query the model
+    // Query Moondream
     const answer = await model.query({
       image,
-      //   question:
-      //     "Focus on the subject importantly a person, Describe their body shape. Describe their clothing attitre,differentiate all the different clothing apperals and accessories the person is wearing then, list out all of them along with the precise rgba colors of the items",
       question:
-        "Rate and review the outfit according to the person complexion, body shape, and the color of the outfit, clothing items details. think hard and Rate the outfit cohesion and if it is not cohesive and doesnot complement the person be critiacal of the outfit and give suggestions.",
+        "Rate and review the outfit according to the person's complexion, body shape, and clothing colors. Rate the outfit cohesion and provide critical suggestions if needed.",
     });
 
-    console.log("Moondream response:", answer);
+    console.log("Moondream response:", answer.answer);
 
-    // Clean up uploaded file
-    fs.unlinkSync(file.path);
+    // Send response to KlusterAI for summarization & engaging reaction
+    console.log("Sending to KlusterAI...");
+    const completion = await openai.chat.completions.create({
+      model: "klusterai/Meta-Llama-3.1-8B-Instruct-Turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a fashion stylist AI that provides engaging and concise responses.",
+        },
+        {
+          role: "user",
+          content: `Here is an outfit review: "${answer.answer}". 
+          1. Generate an engaging one-liner reaction (e.g., 'Wow, stunning!' or 'So stylish!'). 
+          2. Summarize the review in 2-3 sentences.`,
+        },
+      ],
+    });
 
-    res.json({ caption: answer });
+    const klusterData = completion.choices[0].message.content.trim();
+    console.log("KlusterAI Response:", klusterData);
+
+    // Split response correctly
+    const responseParts = klusterData.split("\n\n");
+    const engagingExpression = responseParts[0].replace(/^1\./, "").trim();
+    const summary = responseParts[1]
+      ? responseParts[1].replace(/^2\./, "").trim()
+      : "";
+
+    res.json({
+      engaging_expression: engagingExpression,
+      summary: summary,
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({

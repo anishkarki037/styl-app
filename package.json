@@ -24,6 +24,7 @@
     "moondream": "^0.0.5",
     "node-sass": "^9.0.0",
     "node-vibrant": "^4.0.3",
+    "openai": "^4.85.2",
     "opencv.js": "^1.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

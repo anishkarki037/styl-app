@@ -116,7 +116,7 @@
 
 .feedback-container {
   position: fixed;
-  bottom: -100px;
+  bottom: -100vh;
   left: 50%;
   height: 80vh;
   transform: translateX(-50%);
@@ -132,4 +132,11 @@
 .feedback-container.show {
   bottom: 20px;
   opacity: 1;
+}
+.feedback-image {
+  width: 60%;
+  height: 400px;
+  margin: auto;
+  object-fit: cover;
+  border-radius: 8px;
 }
