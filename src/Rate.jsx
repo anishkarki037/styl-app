@@ -7,6 +7,7 @@ const Rate = () => {
   const [feedback, setFeedback] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showFeedback, setShowFeedback] = useState(false); // New state for feedback visibility
   const inputRef = useRef(null);
 
   const handleImageChange = (event) => {
@@ -58,12 +59,21 @@ const Rate = () => {
         engaging: data.engaging_expression, // Directly access engaging_expression
         summary: data.summary, // Directly access summary
       });
+
+      // Show feedback after success
+      setShowFeedback(true);
     } catch (err) {
       console.error("Processing error:", err);
       setError(err.message || "Error processing image");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBackButtonClick = () => {
+    setShowFeedback(false); // Hide the feedback container
+    setFeedback(null); // Clear the feedback content
+    setImage(null); // Optionally, clear the selected image
   };
 
   return (
@@ -104,7 +114,8 @@ const Rate = () => {
       {error && <p className="error-message">{error}</p>}
 
       {/* Feedback with slide-up effect */}
-      <div className={`feedback-container ${feedback ? "show" : ""}`}>
+      <div className={`feedback-container ${showFeedback ? "show" : ""}`}>
+        <div className="rate-title">STYL</div>
         {image && (
           <img
             src={image}
@@ -119,6 +130,10 @@ const Rate = () => {
             <p>{feedback.summary || "No summary available"}</p>
           </div>
         )}
+
+        <button onClick={handleBackButtonClick} className="back-button">
+          Back
+        </button>
       </div>
     </div>
   );

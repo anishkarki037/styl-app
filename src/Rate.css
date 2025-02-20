@@ -1,20 +1,40 @@
+/* General Container */
+@import url("https://fonts.googleapis.com/css2?family=Delicious+Handrawn&display=swap");
 .rate-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   font-family: Arial, sans-serif;
-  width: 50%;
+  width: 30%; /* Use a percentage width for fluidity */
   margin: auto;
-  height: 100vh;
+  height: calc(100vh - 40px); /* Subtract padding from height */
+  max-height: 100vh;
+  padding: 20px; /* Add padding for smaller devices */
+  background: #ff416c; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #ff4b2b,
+    #ff416c
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #ff4b2b,
+    #ff416c
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+/* Title */
 .rate-title {
-  font-size: 2.5rem;
+  font-size: 3rem;
+  font-family: "Delicious Handrawn", serif;
+
   font-weight: bold;
   margin-bottom: 20px;
+  text-align: center; /* Center title on smaller screens */
 }
 
+/* File Input */
 .file-input-label {
   cursor: pointer;
   width: 100%;
@@ -22,13 +42,16 @@
 
 .image-upload-container {
   width: 100%;
-  height: 60vh;
+  max-width: 500px; /* Add max-width to avoid stretching */
+  height: auto;
+  aspect-ratio: 1; /* Maintain aspect ratio */
   border: 2px dashed #ccc;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  margin-bottom: 20px; /* Spacing */
 }
 
 .upload-placeholder {
@@ -44,6 +67,7 @@
   object-fit: cover;
 }
 
+/* Form */
 .rate-form {
   width: 100%;
   max-width: 400px;
@@ -63,6 +87,7 @@
   display: none;
 }
 
+/* Button */
 .submit-button {
   width: 100%;
   padding: 20px;
@@ -79,15 +104,65 @@
   cursor: not-allowed;
 }
 
+/* Error message */
 .error-message {
   color: red;
   margin-top: 10px;
 }
 
-.feedback-message {
-  color: green;
-  margin-top: 10px;
+/* Feedback */
+.feedback-container {
+  position: fixed;
+  bottom: -100vh;
+  left: 50%;
+  width: 90%; /* Make feedback container fluid */
+  max-width: 600px; /* Prevent it from stretching too wide */
+  height: 80vh;
+  transform: translateX(-50%);
+  background: #8a2387; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f27121,
+    #e94057,
+    #8a2387
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f27121,
+    #e94057,
+    #8a2387
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  opacity: 0;
+  transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+  text-align: center;
 }
+
+.feedback-container.show {
+  bottom: 20px;
+  opacity: 1;
+}
+
+.feedback-image {
+  width: 60%;
+  max-width: 400px; /* Limit max width */
+  height: auto;
+  margin: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.feedback-text {
+  padding: 15px;
+}
+.feedback-text p {
+  color: rgb(220, 220, 220);
+}
+
+/* Color Box */
 .color-box {
   display: inline-block;
   width: 30px;
@@ -95,6 +170,8 @@
   margin: 5px;
   border-radius: 50%;
 }
+
+/* Image Segmentation */
 .segmented-image {
   background: repeating-conic-gradient(#ededed 0% 25%, #ffffff 0% 50%) 50% /
     20px 20px;
@@ -102,9 +179,10 @@
   border-radius: 8px;
 }
 
+/* Image Comparison */
 .image-comparison {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
   margin: 1rem 0;
 }
@@ -114,29 +192,97 @@
   border-radius: 8px;
 }
 
-.feedback-container {
-  position: fixed;
-  bottom: -100vh;
-  left: 50%;
-  height: 80vh;
-  transform: translateX(-50%);
-  background: #c1c1c1;
-  color: #fff;
-  padding: 15px 20px;
-  border-radius: 8px;
-  font-size: 16px;
-  opacity: 0;
-  transition: bottom 0.5s ease-out, opacity 0.5s ease-out;
+/* Media Queries */
+@media (max-width: 768px) {
+  .rate-container {
+    width: calc(90% - 15px);
+    padding: 15px;
+  }
+
+  .rate-title {
+    font-size: 4rem;
+    margin-bottom: 15px;
+  }
+
+  .image-upload-container {
+    height: 80vh; /* Reduce height on smaller screens */
+  }
+
+  .rate-form {
+    max-width: 100%;
+  }
+
+  .submit-button {
+    font-size: 0.9rem;
+  }
+
+  .feedback-container {
+    width: 95%;
+    max-width: 500px;
+    height: 70vh;
+  }
+
+  .feedback-image {
+    width: 70%;
+  }
 }
 
-.feedback-container.show {
-  bottom: 20px;
-  opacity: 1;
+@media (max-width: 480px) {
+  .rate-title {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+
+  .image-upload-container {
+    height: 70vh; /* Further reduce height */
+  }
+
+  .preview-image {
+    object-fit: contain; /* Ensure images are not distorted */
+  }
+
+  .submit-button {
+    padding: 15px;
+    font-size: 1rem;
+  }
+
+  .feedback-container {
+    height: calc(100vh - 40px);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .feedback-image {
+    width: 50%;
+    height: 50vh;
+    margin: 10px auto;
+    object-fit: cover;
+  }
+  .feedback-text {
+    text-align: left;
+  }
+  .feedback-text h2 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+  .feedback-text p {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin: 10px 0;
+  }
 }
-.feedback-image {
-  width: 60%;
-  height: 400px;
-  margin: auto;
-  object-fit: cover;
-  border-radius: 8px;
+.back-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
 }
